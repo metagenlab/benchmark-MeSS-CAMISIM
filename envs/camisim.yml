@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - biopython
+  - biom-format
+  - numpy
+  - matplotlib
+  - perl = 5.32.0
+  - libxml2
+  - wgsim
+  - nanosim
+  - pbsim
+  - samtools
