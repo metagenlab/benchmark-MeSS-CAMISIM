@@ -57,6 +57,7 @@ process prepare_input_and_config_files_CAMISIM {
   output: file "metadata_${replicateId}.tsv" into metadata_ch
           file "genome_to_id_${replicateId}.tsv" into genome_to_id_ch
           file "distribution_${replicateId}.txt" into distribution_ch
+          file "${replicateId}.ini" into camisim_config_ch
   
   script:
   """
