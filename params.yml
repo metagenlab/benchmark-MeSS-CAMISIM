@@ -1,0 +1,15 @@
+publish_dir_mode: copy
+outdir: results
+custom_profile: path/to/art/profile
+mean_len: 125
+frag_len: 270
+frag_sd: 27
+outdir: results
+seed: 42
+mu: 1
+sigma: 2
+ncbi_key: key
+ncbi_mail: mail
+nb: 500
+step: 5
+start: 1
