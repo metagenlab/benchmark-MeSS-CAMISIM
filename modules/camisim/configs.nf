@@ -3,6 +3,7 @@ process CAMISIM_CONFIG {
 
   input:
   path config
+  val seed
   val cpus
   val size
   tuple val(nb), path(tsv)
@@ -12,6 +13,6 @@ process CAMISIM_CONFIG {
   
   script:
   """
-  camisim_config.py $CAMI_PATH $cpus $nb $size $config sample${nb}.ini
+  camisim_config.py $CAMI_PATH $seed $cpus $nb $size $config sample${nb}.ini
   """
 }
