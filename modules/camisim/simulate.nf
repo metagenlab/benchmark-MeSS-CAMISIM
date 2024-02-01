@@ -1,4 +1,5 @@
 process CAMISIM {
+  cpus "${params.cpus}"
   tag "$nb"
 
   conda "$projectDir/envs/camisim.yml"
@@ -7,7 +8,10 @@ process CAMISIM {
   tuple val(nb), path(config)
 
   output:
-  tuple val(nb), path("sample*/*")
+  tuple val(nb), path("sample*/*/reads/*.fq.gz"), emit: fastq
+  tuple val(nb), path("sample*/*/bam/*.bam"), emit: bam
+  tuple val(nb), path("sample*/*/contigs/*.gz"), emit: contigs
+
   
   script:
   """
