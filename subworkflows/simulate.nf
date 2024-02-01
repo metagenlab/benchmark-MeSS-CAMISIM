@@ -19,10 +19,10 @@ workflow SIMULATE {
     mean_len,
     frag_len, 
     frag_sd)
-    ch_mess_reads = MESS.out
+    ch_mess_reads = MESS.out.fastq
 
     CAMISIM(ch_cami_input)
-    ch_camisim_reads = CAMISIM.out
+    ch_camisim_reads = CAMISIM.out.fastq
 
     emit:
     mess_reads = ch_mess_reads
