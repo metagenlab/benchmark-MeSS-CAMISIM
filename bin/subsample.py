@@ -3,7 +3,7 @@
 import pandas as pd
 import numpy as np
 import sys
-import shutil
+from pathlib import Path
 
 if len(sys.argv) != 7:
     exit("Usage: subsample.py <nb> <seed> <mu> <sigma> <assembly_summary.tsv> <out>")
@@ -28,6 +28,8 @@ df = df.sample(nb, random_state=seed)
 df = get_lognormal_dist(df, mu, sigma)
 df["sample"] = [f"sample{nb}"] * len(df)
 df["nb"] = [1] * len(df)
+df["path"] = [path.replace(".gz", "") for path in df["path"]]
 for path in df["path"]:
-    shutil.copy(path, ".")
+    fasta = path.split("/")[-1]
+    Path(fasta).symlink_to(path)
 df.to_csv(out, sep="\t", index=None)
