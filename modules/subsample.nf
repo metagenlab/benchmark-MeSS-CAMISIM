@@ -10,7 +10,7 @@ process SUBSAMPLE {
   
   output:
   tuple val(nb), path("*.tsv"), emit: table
-  tuple val(nb), path("*.fna.gz"), emit: fasta
+  tuple val(nb), path("*.{fna,fa,fasta}*"), emit: fasta
 
   script:
   """
