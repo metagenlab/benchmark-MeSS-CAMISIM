@@ -23,7 +23,7 @@ workflow SETUP {
     MESS_TABLES.out.set{ch_mess_tables}
     CAMISIM_TABLES(ch_subsamples)
     CAMISIM_TABLES.out.set{ch_camisim_tables}
-    CAMISIM_CONFIG(config, cpus, size, ch_camisim_tables)
+    CAMISIM_CONFIG(config, seed, cpus, size, ch_camisim_tables)
     CAMISIM_CONFIG.out.set{ch_camisim_configs}
 
     emit:
