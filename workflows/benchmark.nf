@@ -5,8 +5,14 @@
 include { SETUP } from "../subworkflows/setup"
 include { SIMULATE } from "../subworkflows/simulate"
 
-workflow BENCHMARK {
+if (params.custom_range) {
+    ch_nbs = Channel.fromList(params.custom_range.tokenize(","))
+} else {
     ch_nbs = Channel.fromList((params.start..params.nb).step(params.step))
+}
+
+workflow BENCHMARK {
+    
     SETUP ( 
         ch_nbs,
         params.size,
