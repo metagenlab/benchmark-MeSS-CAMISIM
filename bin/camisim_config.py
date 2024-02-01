@@ -6,16 +6,20 @@ import os
 import configparser
 
 
-if len(sys.argv) != 7:
-    exit("Usage: camisim_config.py <cami_path> <cpus> <nb> <size> <in> <out>")
+if len(sys.argv) != 8:
+    exit("Usage: camisim_config.py <cami_path> <seed> <cpus> <nb> <size> <in> <out>")
 
 
-def write_config(camipath, cpus, nb, size, meta, id2genome, dist, config, outfile):
+def write_config(
+    camipath, seed, cpus, nb, size, meta, id2genome, dist, config, outfile
+):
     with open(outfile, "w") as f:
         for section in config.sections():
             f.write(f"[{section}]\n")
             for key, val in config.items(section):
-                if key == "output_directory":
+                if key == "seed":
+                    val = seed
+                if key in ["output_directory", "temp_directory", "dataset_id"]:
                     val = f"sample{nb}"
                 if key == "max_processors":
                     val = cpus
@@ -39,15 +43,18 @@ def write_config(camipath, cpus, nb, size, meta, id2genome, dist, config, outfil
 
 
 cami_path = sys.argv[1]
-cpus = int(sys.argv[2])
-nb = int(sys.argv[3])
-size = sys.argv[4]
+seed = sys.argv[2]
+cpus = int(sys.argv[3])
+nb = int(sys.argv[4])
+size = sys.argv[5]
 config = configparser.ConfigParser()
-config.read(sys.argv[5])
-out = sys.argv[6]
+config.read(sys.argv[6])
+out = sys.argv[7]
 
-dist_path = os.path.abspath(glob.glob("*_distribution.txt")[0])
-meta_path = os.path.abspath(glob.glob("*_metadata.tsv")[0])
-gen2id_path = os.path.abspath(glob.glob("*_genome_to_id.tsv")[0])
+dist_path = os.path.abspath(glob.glob("distribution_*")[0])
+meta_path = os.path.abspath(glob.glob("metadata_*")[0])
+gen2id_path = os.path.abspath(glob.glob("genome_to_id_*")[0])
 
-write_config(cami_path, cpus, nb, size, meta_path, gen2id_path, dist_path, config, out)
+write_config(
+    cami_path, seed, cpus, nb, size, meta_path, gen2id_path, dist_path, config, out
+)
