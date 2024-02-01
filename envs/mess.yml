@@ -4,10 +4,10 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - mess > 0.2.2
   - assembly_finder >= 0.4.1
   - art >= 2016.06.05
   - seqkit >= 2.6.1
-  - samtools >= 1.8
   - bioconvert
   - pb-ccs
   - pbsim3
