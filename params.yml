@@ -9,8 +9,12 @@ seed: 42
 mu: 1
 sigma: 2
 custom_range: "1,2,3,4,5,6,7,8,9,10,15,20,25,50,100,150,200,250,300,400,500"
-nb: 1
-step: 1
+nb: 1000
+step: 10
 start: 1
 summary: "path/to/assembly/summary"
 config: "path/to/default/config"
+ncbi_key: ncbi_key
+ncbi_email: ncbi_email
+skip_download: false
+skip_fasta_proc: false

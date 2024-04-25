@@ -1,14 +1,14 @@
 process CAMISIM_TABLES {
-  tag "$nb"
+  tag "$sample"
 
   input:
-  tuple val(nb), path(tsv)
+  tuple val(sample), path(tsv)
   
   output:
-  tuple val(nb), path("*.{tsv,txt}")
+  tuple val(sample), path("*.{tsv,txt}")
   
   script:
   """
-  camisim_tables.py $tsv sample$nb
+  camisim_tables.py $tsv $sample
   """
 }

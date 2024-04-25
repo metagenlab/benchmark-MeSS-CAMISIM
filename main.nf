@@ -1,7 +1,11 @@
 nextflow.enable.dsl = 2
 
-include { BENCHMARK } from "./workflows/benchmark"
+if (params.subsample) {
+    include { SUBSETS as RUN } from "./workflows/subsets.nf"
+} else {
+    include { RUN              } from "./workflows/run"
+}
 
 workflow {
-    BENCHMARK()
+    RUN ()
 }

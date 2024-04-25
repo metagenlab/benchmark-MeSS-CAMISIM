@@ -1,14 +1,14 @@
 process MESS_TABLES {
-  tag "$nb"
+  tag "$sample"
 
   input:
-  tuple val(nb), path(tsv)
+  tuple val(sample), path(tsv)
   
   output:
-  tuple val(nb), path("*.tsv")
+  tuple val(sample), path("*.tsv")
   
   script:
   """
-  mess_tables.py $tsv sample${nb}.tsv
+  mess_tables.py $tsv ${sample}.tsv
   """
 }

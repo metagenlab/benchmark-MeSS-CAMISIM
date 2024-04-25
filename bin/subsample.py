@@ -1,35 +1,23 @@
 #!/usr/bin/env python3
 
 import pandas as pd
-import numpy as np
+import random
 import sys
-from pathlib import Path
 
-if len(sys.argv) != 7:
-    exit("Usage: subsample.py <nb> <seed> <mu> <sigma> <assembly_summary.tsv> <out>")
+if len(sys.argv) != 4:
+    exit("Usage: subsample.py <subsets> <seed> <assembly_summary.tsv>")
 
-nb = int(sys.argv[1])
+nbs = sys.argv[1].split(",")
 seed = int(sys.argv[2])
-mu = int(sys.argv[3])
-sigma = int(sys.argv[4])
-tsv = sys.argv[5]
-out = sys.argv[6]
+tsv = sys.argv[3]
 
-
-def get_lognormal_dist(df, mu, sigma):
-    df["lognormal"] = np.random.lognormal(mean=mu, sigma=sigma, size=len(df))
-    df["proportion"] = df["lognormal"] / df["lognormal"].sum()
-    return df
-
-
-np.random.seed(seed)
-df = pd.read_csv(tsv, sep="\t")
-df = df.sample(nb, random_state=seed)
-df = get_lognormal_dist(df, mu, sigma)
-df["sample"] = [f"sample{nb}"] * len(df)
-df["nb"] = [1] * len(df)
-df["path"] = [path.replace(".gz", "") for path in df["path"]]
-for path in df["path"]:
-    fasta = path.split("/")[-1]
-    Path(fasta).symlink_to(path)
-df.to_csv(out, sep="\t", index=None)
+random.seed(seed)
+seeds = random.sample(range(1, 1000000), len(nbs))
+nb2seed = dict(zip(nbs, seeds))
+all_df = pd.read_csv(tsv, sep="\t")
+for nb in nbs:
+    df = all_df.sample(int(nb), random_state=nb2seed[nb])
+    df["cov_sim"] = [1] * len(df)
+    df[
+        ["accession", "total_sequence_length", "number_of_contigs", "cov_sim"]
+    ].to_csv(f"subset_{nb}.tsv", sep="\t", index=None)

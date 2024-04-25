@@ -1,18 +1,21 @@
 process CAMISIM_CONFIG {
-  tag "$nb"
-
+  tag "$sample"
+  
   input:
+  tuple val(sample), path(summary)
   path config
   val seed
   val cpus
-  val size
-  tuple val(nb), path(tsv)
+  val readlen
+  val fraglen
+  val fragsd
+  tuple val(sample), path(tsv)
   
   output:
-  tuple val(nb), path("*.ini")
+  tuple val(sample), path("*.ini")
   
   script:
   """
-  camisim_config.py $CAMI_PATH $seed $cpus $nb $size $config sample${nb}.ini
+  camisim_config.py $summary $CAMI_PATH $seed $cpus $sample $readlen $fraglen $fragsd $config ${sample}.ini
   """
 }

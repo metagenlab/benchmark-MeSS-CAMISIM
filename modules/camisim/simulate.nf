@@ -1,21 +1,21 @@
-process CAMISIM {
+process CAMISIM_SIMULATE {
   cpus "${params.cpus}"
-  tag "$nb"
+  tag "$sample"
 
   conda "$projectDir/envs/camisim.yml"
   
   input:
-  tuple val(nb), path(config)
+  tuple val(sample), path(config)
 
   output:
-  tuple val(nb), path("sample*/*/reads/*.fq.gz"), emit: fastq
-  tuple val(nb), path("sample*/*/bam/*.bam"), emit: bam
-  tuple val(nb), path("sample*/*/contigs/*.gz"), emit: contigs
+  tuple val(sample), path("*/*/reads/*.fq.gz"), emit: fastq
+  tuple val(sample), path("*/*/bam/*.bam"), emit: bam
+  tuple val(sample), path("*/*/contigs/*.gz"), emit: contigs
+  tuple val(sample), path("*/*.txt"), emit: tax
 
-  
   script:
   """
-  mkdir sample$nb
+  mkdir $sample
   $CAMI_PATH/metagenomesimulation.py $config
   """
 }
