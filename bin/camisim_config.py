@@ -7,9 +7,9 @@ import configparser
 import pandas as pd
 
 
-if len(sys.argv) != 11:
+if len(sys.argv) != 14:
     exit(
-        "Usage: camisim_config.py <summary> <cami_path> <seed> <cpus> <sample> <read_len> <frag_len> <frag_sd> <in> <out>"
+        "Usage: camisim_config.py <abundance> <dist> <meta> <gen2id> <cami_path> <seed> <cpus> <sample> <read_len> <frag_len> <frag_sd> <in> <out>"
     )
 
 
@@ -65,24 +65,24 @@ def write_config(
                 f.write(f"{key}={val}\n")
 
 
-summary = sys.argv[1]
-cami_path = sys.argv[2]
-seed = sys.argv[3]
-cpus = int(sys.argv[4])
-sample = sys.argv[5]
-read_len = sys.argv[6]
-frag_len = sys.argv[7]
-frag_sd = sys.argv[8]
+abundance_df = sys.argv[1]
+dist_path = os.path.abspath(sys.argv[2])
+meta_path = os.path.abspath(sys.argv[3])
+gen2id_path = os.path.abspath(sys.argv[4])
+cami_path = sys.argv[5]
+seed = sys.argv[6]
+cpus = int(sys.argv[7])
+sample = sys.argv[8]
+read_len = sys.argv[9]
+frag_len = sys.argv[10]
+frag_sd = sys.argv[11]
 config = configparser.ConfigParser()
-config.read(sys.argv[9])
-out = sys.argv[10]
+config.read(sys.argv[12])
+out = sys.argv[13]
 
-dist_path = os.path.abspath(glob.glob("distribution_*")[0])
-meta_path = os.path.abspath(glob.glob("metadata_*")[0])
-gen2id_path = os.path.abspath(glob.glob("genome_to_id_*")[0])
 
 nb = pd.read_csv(gen2id_path, sep="\t", names=["fasta", "path"]).shape[0]
-size = pd.read_csv(summary, sep="\t")["bases"].sum() / 10**9
+size = pd.read_csv(abundance_df, sep="\t")["bases"].sum() / 10**9
 
 write_config(
     cami_path,

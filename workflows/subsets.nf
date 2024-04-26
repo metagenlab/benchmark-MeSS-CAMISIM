@@ -24,15 +24,20 @@ workflow SUBSETS {
                    )
     MESS_SIMULATE.out.cov.set{ch_abundances}
     CAMISIM_TABLES(ch_abundances)
-    CAMISIM_TABLES.out.set{ch_cami_tables}
-    CAMISIM_CONFIG (ch_abundances,
+
+
+    CAMISIM_TABLES.out.dist.set{ch_cami_dist}
+    CAMISIM_TABLES.out.meta.set{ch_cami_meta}
+    CAMISIM_TABLES.out.g2id.set{ch_cami_g2id}
+
+    ch_cami_config_in = ch_abundances.join(ch_cami_dist).join(ch_cami_meta).join(ch_cami_g2id)
+    CAMISIM_CONFIG (ch_cami_config_in,
                    params.config,
                    params.seed,
                    params.cpus,
                    params.mean_len,
                    params.frag_len,
                    params.frag_sd,
-                   ch_cami_tables
                    )
     ch_camisim_config = CAMISIM_CONFIG.out
     CAMISIM_SIMULATE (ch_camisim_config)
