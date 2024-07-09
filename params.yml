@@ -1,0 +1,16 @@
+input: null
+subsample: true
+cpus: 20
+publish_dir_mode: copy
+paired: true
+size: "0.1G"
+err_profile: "path/to/CAMISIM/tools/art_illumina-2.3.6/profiles/ART_MBARC-26_HiSeq_R"
+mean_len: 100
+frag_len: 270
+frag_sd: 27
+subsets: "1,2,3,4,5,6,7,8,9,10,20,40,80,160,320,640"
+nb: 1
+step: 1
+start: 1
+summary: "path/to/genome/download/assembly_summary.tsv"
+config: "path/to/repo/benchmark-MeSS-CAMISIM/default_config.ini"

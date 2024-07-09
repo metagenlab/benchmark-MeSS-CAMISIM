@@ -1,14 +1,20 @@
+name: camisim
 channels:
   - conda-forge
   - bioconda
+  - defaults
 dependencies:
+  - ncurses
+  - python=3.8.*
+  - perl
+  - perl-libxml-perl
+  - samtools
   - biopython
   - biom-format
-  - numpy
+  - numpy=1.19
   - matplotlib
-  - perl = 5.32.0
-  - libxml2
   - wgsim
   - nanosim
   - pbsim
-  - samtools
+  - joblib
+  - scikit-learn

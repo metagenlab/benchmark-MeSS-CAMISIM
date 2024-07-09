@@ -1,4 +1,18 @@
+name: mess
 channels:
+  - conda-forge
   - bioconda
+  - defaults
 dependencies:
-  - mess=0.2.2
+  - mess >= 0.8.0
+  - seqkit
+  - taxonkit
+  - bioconvert
+  - art
+  - pbsim3
+  - pbccs
+  - curl
+  - sed
+  - tar
+  - pigz
+  
