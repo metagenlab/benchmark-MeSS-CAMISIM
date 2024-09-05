@@ -1,4 +1,6 @@
 process SUBSAMPLE {
+  container 'docker://quay.io/biocontainers/pandas:2.2.1'
+  
   input:
   val(subsets)
   val(seed)
