@@ -1,4 +1,6 @@
 process CAMISIM_TABLES {
+  container 'docker://quay.io/biocontainers/pandas:2.2.1'
+  
   tag "$sample"
 
   input:

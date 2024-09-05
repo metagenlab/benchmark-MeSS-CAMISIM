@@ -1,5 +1,10 @@
 process SEQKIT_SPLIT2 {
+  tag "$sample"
+  
+  container 'docker://quay.io/biocontainers/seqkit:2.8.2--h9ee0642_0'
+  
   cpus 10
+  
   input:
   tuple val(sample), path(fastq)
   
@@ -7,7 +12,6 @@ process SEQKIT_SPLIT2 {
   tuple val(sample), path("*.fq.gz")
   
   script:
-  
   """
   seqkit \\
     split2 \\

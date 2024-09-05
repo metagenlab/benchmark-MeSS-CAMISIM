@@ -1,8 +1,9 @@
 process CAMISIM_SIMULATE {
   cpus "${params.cpus}"
+  
   tag "$sample"
 
-  conda "$projectDir/envs/camisim.yml"
+  container "docker://docker.io/cami/camisim:1.3.0"
   
   input:
   tuple val(sample), path(config)
@@ -16,6 +17,6 @@ process CAMISIM_SIMULATE {
   script:
   """
   mkdir $sample
-  $CAMI_PATH/metagenomesimulation.py $config
+  python3 /usr/local/bin/metagenomesimulation.py $config
   """
 }
