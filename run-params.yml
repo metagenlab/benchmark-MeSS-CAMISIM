@@ -1,0 +1,14 @@
+input: "data/abundances"
+cami_config: default_config.ini
+cpus: 12
+ncbi_key: ede75486868e0691a5086dc4528b6449d407
+outdir: results
+subsample: false
+container_prefix: containers
+size: "1G"
+seed: 1
+err_path: "/home/fchaaban/bin/CAMISIM/tools/art_illumina-2.3.6/profiles"
+err_name: HiSeq2kL100 
+mean_len: 100
+frag_len: 156
+frag_sd: 10
