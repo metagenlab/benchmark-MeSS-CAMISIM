@@ -1,5 +1,5 @@
 process MESS {
-  cpus "${params.cpus}"
+  label "process_high"
   
   tag "$sample"
 

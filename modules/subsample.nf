@@ -1,4 +1,6 @@
 process SUBSAMPLE {
+  label "process_single"
+
   container 'docker://quay.io/biocontainers/pandas:2.2.1'
   
   input:

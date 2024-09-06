@@ -1,7 +1,9 @@
 process CAMISIM_CONFIG {
-  container 'docker://quay.io/biocontainers/pandas:2.2.1'
-  
+  label 'process_single'
+
   tag "$sample"
+
+  container 'docker://quay.io/biocontainers/pandas:2.2.1'
   
   input:
   tuple val(sample), path(abundance), path(dist), path(meta), path(gen2id), path(config), path(taxdump, stageAs: "taxdump/*")

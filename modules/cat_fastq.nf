@@ -1,4 +1,6 @@
 process CAT_FASTQ {
+  label "process_low"
+  
   tag "$sample"
   
   input:

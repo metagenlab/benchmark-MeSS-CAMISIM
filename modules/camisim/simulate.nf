@@ -1,5 +1,5 @@
 process CAMISIM_SIMULATE {
-  cpus "${params.cpus}"
+  label "process_high"
   
   tag "$sample"
 

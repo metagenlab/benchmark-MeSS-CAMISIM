@@ -17,6 +17,8 @@ workflow DOWNLOAD {
 
 
 process TAXDUMP {
+  label "process_low"
+
   container 'docker://quay.io/biocontainers/curl:7.80.0'
 
   output:
@@ -32,6 +34,8 @@ process TAXDUMP {
 
 
 process UNIQUE_ACCESSIONS {
+  label "process_single"
+
   container "docker://quay.io/biocontainers/csvtk:0.30.0--h9ee0642_2"
   
   input:
@@ -52,6 +56,8 @@ process UNIQUE_ACCESSIONS {
 
 
 process ASSEMBLY_FINDER {
+  label "process_medium"
+
   container 'docker://ghcr.io/metagenlab/assembly_finder:v0.7.7'
   
   input:
@@ -67,6 +73,7 @@ process ASSEMBLY_FINDER {
   """
   assembly_finder \\
   $args \\
+  --threads $task.cpus \\
   -i $tsv \\
   --accession \\
   --taxonkit taxdump \\
