@@ -17,7 +17,7 @@ workflow DOWNLOAD {
 
 
 process TAXDUMP {
-  label "process_low"
+  label "process_single"
 
   container 'docker://quay.io/biocontainers/curl:7.80.0'
 
