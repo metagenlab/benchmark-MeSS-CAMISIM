@@ -1,6 +1,4 @@
 process CAMISIM_SIMULATE {
-  label "process_high"
-  
   tag "$sample"
 
   container "docker://docker.io/cami/camisim:1.3.0"
@@ -15,8 +13,9 @@ process CAMISIM_SIMULATE {
   tuple val(sample), path("*/*.txt"), emit: tax
 
   script:
+  def prefix = "python3 /usr/local/bin"
   """
   mkdir $sample
-  python3 /usr/local/bin/metagenomesimulation.py $config
+  ulimit -n 100000 && $prefix/metagenomesimulation.py $config
   """
 }
