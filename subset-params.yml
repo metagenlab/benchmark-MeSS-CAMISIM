@@ -1,0 +1,15 @@
+subsample: true
+cpus: 16
+size: "0.01G"
+err_profile: "$HOME/bin/CAMISIM/tools/art_illumina-2.3.6/profiles/ART_MBARC-26_HiSeq_R"
+err_path: "CAMISIM/tools/art_illumina-2.3.6/profiles"
+err_name: ART_MBARC-26
+mean_len: 100
+frag_len: 270
+frag_sd: 27
+subsets: "1,2,3,4"
+nb: 1
+step: 1
+start: 1
+summary: "data/bacteria/assembly_summary.tsv"
+cami_config: default_config.ini
