@@ -1,14 +1,17 @@
-#!/usr/bin/env nextflow
-
 workflow DOWNLOAD {
   take:
-  samples
-  key
+  input
+  uniq
 
   main:
   TAXDUMP()
-  UNIQUE_ACCESSIONS(samples)
-  ASSEMBLY_FINDER(UNIQUE_ACCESSIONS.out, TAXDUMP.out, key)
+  if (uniq) {
+    af_ch = UNIQUE_ACCESSIONS(input)
+  }
+  else {
+    af_ch = input
+  }
+  ASSEMBLY_FINDER(af_ch, TAXDUMP.out)
   
   emit:
   taxdump = TAXDUMP.out
@@ -53,20 +56,19 @@ process UNIQUE_ACCESSIONS {
   """
 }
 
-
-
 process ASSEMBLY_FINDER {
   label "process_medium"
 
   container 'docker://ghcr.io/metagenlab/assembly_finder:v0.7.7'
   
+  secret 'NCBI_KEY'
+
   input:
-  path tsv
+  val input
   path taxdump, stageAs: "taxdump/*"
-  val ncbi_key
   
   output:
-  path("accessions/assembly_summary.tsv")
+  path("download/assembly_summary.tsv")
   
   script:
   def args = task.ext.args ?: ''
@@ -74,13 +76,9 @@ process ASSEMBLY_FINDER {
   assembly_finder \\
   $args \\
   --threads $task.cpus \\
-  -i $tsv \\
-  --accession \\
+  -i $input \\
   --taxonkit taxdump \\
-  --api-key $ncbi_key \\
-  -o accessions
+  --api-key \$NCBI_KEY \\
+  -o download
   """
 }
-
-
-
