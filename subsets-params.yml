@@ -1,8 +1,8 @@
 subsample: true
 input: bacteria
 outdir: results
-total: 3
-subsets: 1,2
+total: 2000
+subsets: 1,2,3,4,5,6,7,8,9,10,20,40,80,160,320,640
 cpus: 13
 seed: 1
 err_path: /home/fchaaban/bin/CAMISIM/tools/art_illumina-2.3.6/profiles
