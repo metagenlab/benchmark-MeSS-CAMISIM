@@ -5,10 +5,9 @@ ncbi_key: NCBI_KEY
 outdir: results
 subsample: false
 container_prefix: /mnt/slow_storage/containers
-size: "1G"
 seed: 1
 err_path: "CAMISIM/tools/art_illumina-2.3.6/profiles"
-err_name: HiSeq2kL100 
+err_name: EmpHiSeq2k
 mean_len: 100
 frag_len: 156
 frag_sd: 10
