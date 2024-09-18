@@ -1,4 +1,6 @@
 process MESS {
+  label "process_high"
+
   tag "$sample"
 
   container "docker://ghcr.io/metagenlab/mess:dev"
@@ -14,9 +16,9 @@ process MESS {
 
   output:
   tuple val(sample), path("*/coverages.tsv"), emit: cov
-  tuple val(sample), path("*/*.fq.gz"), emit: fastq
-  tuple val(sample), path("*/bam/*.bam*"), emit: bam
-  tuple val(sample), path("*/tax/*.txt"), emit: tax
+  tuple val(sample), path("*/*.fq.gz")      , emit: fastq
+  tuple val(sample), path("*/bam/*.bam*")   , emit: bam
+  tuple val(sample), path("*/tax/*.txt")    , emit: tax
   
   script:
   def total_bases = bases ? "--bases $bases" : ""

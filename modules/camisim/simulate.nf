@@ -1,4 +1,6 @@
 process CAMISIM_SIMULATE {
+  label "process_long"
+  
   tag "$sample"
 
   container "docker://docker.io/cami/camisim:1.3.0"
