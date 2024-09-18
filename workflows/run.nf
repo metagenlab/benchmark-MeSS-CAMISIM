@@ -1,17 +1,34 @@
 
-include { DOWNLOAD       } from "../subworkflows/download.nf"
-include { MESS           } from "../modules/mess/simulate.nf"
-include { CAMISIM        } from "../subworkflows/camisim.nf"
+include { DOWNLOAD  } from "../subworkflows/download.nf"
+include { MESS      } from "../modules/mess/simulate.nf"
+include { CAMISIM   } from "../subworkflows/camisim.nf"
+include { SUBSAMPLE } from "../modules/subsample"
 
 workflow RUN {
-    
-    tables_ch = Channel.fromPath("${params.input}/*.tsv")
-                       .collect()
-    DOWNLOAD(tables_ch, params.ncbi_key)
+    if (params.subsample) {
+        uniq = false
+        input_ch = Channel.of(params.input)
+    } else {
+        input_ch = Channel.fromPath("${params.input}/*.tsv")
+                          .collect()
+        uniq = true
+    }
 
+    DOWNLOAD(input_ch, uniq)
+
+    if (params.subsample) {
+        SUBSAMPLE(params.subsets, 
+                  params.seed, 
+                  DOWNLOAD.out.summary)
+        samples_ch = SUBSAMPLE.out.flatten()
+                                  .map { it -> 
+                                  [it.baseName.tokenize(".")[0].tokenize("subset_")[0], it] 
+                                }
+    } else {
+        samples_ch = Channel.fromPath("${params.input}/*.tsv")
+                            .map { it -> [it.baseName.tokenize(".")[0], it] }
+    }
     
-    samples_ch = Channel.fromPath("${params.input}/*.tsv")
-                        .map{it -> [it.baseName.tokenize(".")[0], it]}
                         
     taxdump_ch = DOWNLOAD.out.taxdump.collect().toList()
     prefix_ch = Channel.fromPath(params.container_prefix)
