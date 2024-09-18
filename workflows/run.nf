@@ -20,9 +20,14 @@ workflow RUN {
                         .combine(taxdump_ch)
                         .combine(prefix_ch)
                         .combine(error_profile_ch)
+    if (params.total_bases) {
+        bases = params.total_bases
+    } else {
+        bases = false
+    }
     MESS(mess_ch,
         params.err_name,
-        params.size,
+        bases,
         params.seed,
         params.mean_len,
         params.frag_len,
