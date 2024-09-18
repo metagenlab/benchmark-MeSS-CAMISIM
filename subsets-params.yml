@@ -1,0 +1,14 @@
+subsample: true
+input: bacteria
+outdir: results
+total: 3
+subsets: 1,2
+cpus: 13
+seed: 1
+err_path: /home/fchaaban/bin/CAMISIM/tools/art_illumina-2.3.6/profiles
+err_name: ART_MBARC-26
+container_prefix: containers
+mean_len: 100
+frag_len: 270
+frag_sd: 27
+cami_config: default_config.ini
