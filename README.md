@@ -12,18 +12,19 @@ Before launching the pipeline set your key as a secret:
 nextflow secrets set NCBI_KEY 0123456789abcdef
 ```
 
-## Run using sample tables
-
+## Run the pipeline
+### Using the example tables in data
 ```sh
-nextflow run main.nf --input data -params-file run-params.yml --container_prefix containers
---outdir run
+nextflow run main.nf --input data -params-file run-params.yml
 ```
 
 
-## Run with subsets
+### Subsets piepeline
+You can download a total set of genomes from a given taxon (bacteria for example), and run CAMISIM and MeSS on subsamples of that set.
+
+For example, download 6 bacterial reference genomes and simulate reads at 1X coverage depth for 1,2,3 subsets:
 
 ```sh
-nextflow run main.nf --input data -params-file subsets-params.yml --container_prefix containers
---outdir subsets
+nextflow run main.nf -params-file subsets-params.yml --total 6 --subsets 1,2,3 --outdir subsets
 ```
 
