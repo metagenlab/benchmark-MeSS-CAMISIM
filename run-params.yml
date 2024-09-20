@@ -1,0 +1,7 @@
+subsample: false
+cpus: 16
+seed: 1
+err_name: EmpHiSeq2k
+mean_len: 100
+frag_len: 156
+frag_sd: 10

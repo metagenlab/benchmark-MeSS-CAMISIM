@@ -1,5 +1,9 @@
 process CAMISIM_TABLES {
+  label 'process_single'
+
   tag "$sample"
+  
+  container 'docker://quay.io/biocontainers/pandas:2.2.1'
 
   input:
   tuple val(sample), path(tsv)

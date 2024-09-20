@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 
-import glob
 import sys
 import os
 import configparser
 import pandas as pd
 
 
-if len(sys.argv) != 14:
+if len(sys.argv) != 13:
     exit(
-        "Usage: camisim_config.py <abundance> <dist> <meta> <gen2id> <cami_path> <seed> <cpus> <sample> <read_len> <frag_len> <frag_sd> <in> <out>"
+        "Usage: camisim_config.py <abundance> <dist> <meta> <gen2id> <seed> <cpus> <sample> <read_len> <frag_len> <frag_sd> <in> <out>"
     )
 
 
 def write_config(
-    camipath,
+    taxdump,
     seed,
     cpus,
     sample,
@@ -45,13 +44,6 @@ def write_config(
                     val = sample
                 if key == "max_processors":
                     val = cpus
-                if key in [
-                    "base_profile_name",
-                    "readsim",
-                    "error_profiles",
-                    "strain_simulation_template",
-                ]:
-                    val = os.path.join(camipath, val)
                 if key == "size":
                     val = size
                 if key in ["genomes_total", "num_real_genomes"]:
@@ -62,30 +54,32 @@ def write_config(
                     val = id2genome
                 if key == "distribution_file_paths":
                     val = dist
+                if key == "ncbi_taxdump":
+                    val = taxdump
                 f.write(f"{key}={val}\n")
 
 
+ncbi_taxdump = os.path.abspath("taxdump")
 abundance_df = sys.argv[1]
 dist_path = os.path.abspath(sys.argv[2])
 meta_path = os.path.abspath(sys.argv[3])
 gen2id_path = os.path.abspath(sys.argv[4])
-cami_path = sys.argv[5]
-seed = sys.argv[6]
-cpus = int(sys.argv[7])
-sample = sys.argv[8]
-read_len = sys.argv[9]
-frag_len = sys.argv[10]
-frag_sd = sys.argv[11]
+seed = sys.argv[5]
+cpus = int(sys.argv[6])
+sample = sys.argv[7]
+read_len = sys.argv[8]
+frag_len = sys.argv[9]
+frag_sd = sys.argv[10]
 config = configparser.ConfigParser()
-config.read(sys.argv[12])
-out = sys.argv[13]
+config.read(sys.argv[11])
+out = sys.argv[12]
 
 
 nb = pd.read_csv(gen2id_path, sep="\t", names=["fasta", "path"]).shape[0]
 size = pd.read_csv(abundance_df, sep="\t")["bases"].sum() / 10**9
 
 write_config(
-    cami_path,
+    ncbi_taxdump,
     seed,
     cpus,
     sample,
@@ -98,5 +92,5 @@ write_config(
     gen2id_path,
     dist_path,
     config,
-    out,
+    out
 )

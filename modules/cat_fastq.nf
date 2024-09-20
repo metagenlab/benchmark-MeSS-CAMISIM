@@ -1,4 +1,8 @@
 process CAT_FASTQ {
+  label "process_single"
+  
+  tag "$sample"
+  
   input:
   tuple val(sample), path(fastq, stageAs: 'in/*')
   

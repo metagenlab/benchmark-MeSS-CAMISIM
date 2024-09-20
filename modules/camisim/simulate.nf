@@ -1,8 +1,9 @@
 process CAMISIM_SIMULATE {
-  cpus "${params.cpus}"
+  label "process_long"
+  
   tag "$sample"
 
-  conda "$projectDir/envs/camisim.yml"
+  container "docker://docker.io/cami/camisim:1.3.0"
   
   input:
   tuple val(sample), path(config)
@@ -14,8 +15,9 @@ process CAMISIM_SIMULATE {
   tuple val(sample), path("*/*.txt"), emit: tax
 
   script:
+  def prefix = "python3 /usr/local/bin"
   """
   mkdir $sample
-  $CAMI_PATH/metagenomesimulation.py $config
+  ulimit -n 100000 && $prefix/metagenomesimulation.py $config
   """
 }

@@ -1,49 +1,67 @@
-include { CAT_FASTQ           } from "../modules/cat_fastq.nf"
-include { SEQKIT_SORT         } from "../modules/seqkit/sort.nf"
-include { SEQKIT_SPLIT2       } from "../modules/seqkit/split.nf"
-include { CAMISIM_TABLES      } from "../modules/camisim/tables.nf"
-include { CAMISIM_CONFIG      } from "../modules/camisim/configs.nf"
-include { CAMISIM_SIMULATE    } from "../modules/camisim/simulate.nf"
-include { MESS_SIMULATE       } from "../modules/mess/simulate.nf"
+
+include { DOWNLOAD  } from "../subworkflows/download.nf"
+include { MESS      } from "../modules/mess/simulate.nf"
+include { CAMISIM   } from "../subworkflows/camisim.nf"
+include { SUBSAMPLE } from "../modules/subsample"
 
 workflow RUN {
-    ch_samples = Channel.fromPath("${params.input}/*.tsv")
-                        .map{it -> [it.baseName.tokenize(".")[0], it]}
+    if (params.subsample) {
+        uniq = false
+        input_ch = Channel.of(params.input)
+    } else {
+        input_ch = Channel.fromPath("${params.input}/*.tsv")
+                          .collect()
+        uniq = true
+    }
+
+    DOWNLOAD(input_ch, uniq)
+
+    if (params.subsample) {
+        SUBSAMPLE(params.subsets, 
+                  params.seed, 
+                  DOWNLOAD.out.summary)
+        samples_ch = SUBSAMPLE.out.flatten()
+                                  .map { it -> 
+                                  [it.baseName.tokenize(".")[0].tokenize("subset_")[0], it] 
+                                }
+    } else {
+        samples_ch = Channel.fromPath("${params.input}/*.tsv")
+                            .map { it -> [it.baseName.tokenize(".")[0], it] }
+    }
     
-    MESS_SIMULATE (ch_samples,
-                   params.summary,
-                   params.seed,
-                   params.size, 
-                   params.err_profile,
-                   params.mean_len,
-                   params.frag_len,
-                   params.frag_sd
-                   )
-    MESS_SIMULATE.out.cov.set{ch_abundances}
+                        
+    taxdump_ch = DOWNLOAD.out.taxdump.collect().toList()
+    prefix_ch = Channel.fromPath(params.container_prefix)
+    error_profile_ch = Channel.fromPath("${params.err_path}")
+    mess_ch = samples_ch.combine(DOWNLOAD.out.summary)
+                        .combine(taxdump_ch)
+                        .combine(prefix_ch)
+                        .combine(error_profile_ch)
+    if (params.total_bases) {
+        bases = params.total_bases
+    } else {
+        bases = false
+    }
+    MESS(mess_ch,
+        params.err_name,
+        bases,
+        params.seed,
+        params.mean_len,
+        params.frag_len,
+        params.frag_sd
+        )
+    coverages_ch = MESS.out.cov
 
-    CAMISIM_TABLES(ch_abundances)
-    CAMISIM_TABLES.out.set{ch_cami_tables}
-    CAMISIM_CONFIG (ch_abundances,
-                   params.config,
-                   params.seed,
-                   params.cpus,
-                   params.mean_len,
-                   params.frag_len,
-                   params.frag_sd,
-                   ch_cami_tables
-                   )
-    CAMISIM_CONFIG.out.set{ ch_cami_config }
-    CAMISIM_SIMULATE (ch_cami_config)
-    CAMISIM_SIMULATE.out.fastq.set{ch_camisim_reads}
-    CAT_FASTQ(ch_camisim_reads)
-    CAT_FASTQ.out.set{ch_cat_cami_fq}
-    SEQKIT_SORT(ch_cat_cami_fq)
-    SEQKIT_SORT.out.set{ch_sorted_fq}
-    SEQKIT_SPLIT2(ch_sorted_fq)
-    SEQKIT_SPLIT2.out.set{ch_split_fq}
+    CAMISIM(coverages_ch,
+            taxdump_ch,
+            params.cami_config,
+            params.seed,
+            params.cpus,
+            params.mean_len,
+            params.frag_len,
+            params.frag_sd
+            )
 
-
-    
 }
 
 

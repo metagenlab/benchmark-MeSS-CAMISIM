@@ -2,56 +2,29 @@
 
 Nextflow pipeline to benchmark two shotgun metagenomic communities simulators.
 
-## Setup
+## Setup NCBI API key
 
-### 1) Clone CAMISIM repository
+Go to https://www.ncbi.nlm.nih.gov/account/login/ to create an NCBI account and get an API key.
 
-```bash
-git clone https://github.com/CAMI-challenge/CAMISIM
+Before launching the pipeline set your key as a secret:
+
+```sh
+nextflow secrets set NCBI_KEY 0123456789abcdef
 ```
 
-### 2) Edit CAMISIM path in nextflow.config
-
-```bash
-env {
-    CAMI_PATH = "path/to/CAMISIM"
-}
+## Run the pipeline
+### Using the example tables in data
+```sh
+nextflow run main.nf --input data -params-file run-params.yml
 ```
 
-### 3) Download and decompress taxdump
 
-```bash
-curl https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz -o taxdump.tar.gz
-tar -xzvf taxdump.tar.gz
+### Subsets piepeline
+You can download a total set of genomes from a given taxon (bacteria for example), and run CAMISIM and MeSS on subsamples of that set.
+
+For example, download 6 bacterial reference genomes and simulate reads at 1X coverage depth for 1,2,3 subsets:
+
+```sh
+nextflow run main.nf -params-file subsets-params.yml --total 6 --subsets 1,2,3 --outdir subsets
 ```
 
-### 4) Edit CAMISIM config
-
-You need to edit paths to samtools binaries and taxdump path
-
-```ini
-samtools=/path/to/your/samtools/bin
-ncbi_taxdump=/path/to/your/taxdump
-```
-
-### 5) download genomes with assembly_finder
-
-```bash
-assembly_finder -i bacteria -nb 2000 --assembly-level complete --reference --api-key $api-key
-```
-
-### 5) Edit params
-
-Download path and repo paths
-
-```yaml
-summary: "path/to/bacteria/assembly_summary.tsv"
-config: "path/to/repo/benchmark-MeSS-CAMISIM/default_config.ini"
-err_profile: "path/to/CAMISIM/tools/art_illumina-2.3.6/profiles/ART_MBARC-26_HiSeq_R"
-```
-
-## Run
-
-```bash
-nextflow run main.nf -c nextflow.config -params-file params.yml
-```
