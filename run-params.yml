@@ -1,6 +1,5 @@
-cpus: 16
-outdir: results
 subsample: false
+cpus: 16
 seed: 1
 err_name: EmpHiSeq2k
 mean_len: 100
