@@ -1,10 +1,8 @@
 process CAMISIM_SIMULATE {
   label "process_long"
-  
-  tag "$sample"
-
+  tag "${sample}"
   container "docker://docker.io/cami/camisim:1.3.0"
-  
+
   input:
   tuple val(sample), path(config)
 
@@ -17,7 +15,7 @@ process CAMISIM_SIMULATE {
   script:
   def prefix = "python3 /usr/local/bin"
   """
-  mkdir $sample
-  ulimit -n 100000 && $prefix/metagenomesimulation.py $config
+  mkdir ${sample}
+  ulimit -n 100000 && ${prefix}/metagenomesimulation.py ${config}
   """
 }
