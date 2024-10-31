@@ -1,7 +1,7 @@
 process MESS {
   label "process_high"
   tag "${sample}"
-  container "docker://ghcr.io/metagenlab/mess:dev"
+  container "ghcr.io/metagenlab/mess:v0.9.0"
 
   input:
   tuple val(sample), path(tsv), path(summary), path(taxdump, stageAs: "taxdump/*"), path(prefix), path(err_path, stageAs: "profiles/*")
@@ -21,14 +21,14 @@ process MESS {
   script:
   def total_bases = bases ? "--bases ${bases}" : ""
   """
-  mess simulate --threads ${task.cpus} \\\\
-  --sdm apptainer --prefix ${prefix} \\\\
-  --taxonkit taxdump \\\\
-  --seed ${seed} -i ${tsv} -o ${sample} --bam \\\\
-  ${total_bases} --tech illumina \\\\
-  --asm-summary ${summary}  \\\\
-  --custom-err ${err_path}/${err_name} \\\\
-  --mean-len ${mean_len} --frag-len ${frag_len} \\\\
+  mess simulate --threads ${task.cpus} \\
+  --sdm apptainer --prefix ${prefix} \\
+  --taxonkit taxdump \\
+  --seed ${seed} -i ${tsv} -o ${sample} --bam \\
+  ${total_bases} --tech illumina \\
+  --asm-summary ${summary}  \\
+  --custom-err ${err_path}/${err_name} \\
+  --mean-len ${mean_len} --frag-len ${frag_len} \\
   --frag-sd ${frag_sd}
   mv ${sample}/fastq/*R1.fq.gz ${sample}/mess_${sample}_R1.fq.gz
   mv ${sample}/fastq/*R2.fq.gz ${sample}/mess_${sample}_R2.fq.gz
