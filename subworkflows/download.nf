@@ -74,7 +74,7 @@ process ASSEMBLY_FINDER {
   --threads ${task.cpus} \\
   -i ${input} \\
   --taxonkit taxdump \\
-  --api-key \\${NCBI_KEY} \\
+  --api-key \$NCBI_KEY \\
   -o download
   """
 }
