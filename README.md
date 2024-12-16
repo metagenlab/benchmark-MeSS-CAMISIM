@@ -1,6 +1,10 @@
 # benchmark-MeSS-CAMISIM
 
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14500242.svg)](https://doi.org/10.5281/zenodo.14500242)
+
+
+
 This repo contains the [nextflow](https://github.com/nextflow-io/nextflow) pipeline to benchmark [CAMISIM](https://github.com/CAMI-challenge/CAMISIM) and [MeSS](https://github.com/metagenlab/MeSS), two metagenomic communities simulators.
 
 The pipeline is used to generate [figures](https://github.com/metagenlab/MeSS-figures) data from our paper describing MeSS.
