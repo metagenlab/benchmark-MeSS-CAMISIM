@@ -1,6 +1,10 @@
 # benchmark-MeSS-CAMISIM
 
-Nextflow pipeline to benchmark two shotgun metagenomic communities simulators.
+
+This repo contains the [nextflow](https://github.com/nextflow-io/nextflow) pipeline to benchmark [CAMISIM](https://github.com/CAMI-challenge/CAMISIM) and [MeSS](https://github.com/metagenlab/MeSS), two metagenomic communities simulators.
+
+The pipeline is used to generate [figures](https://github.com/metagenlab/MeSS-figures) data from our paper describing MeSS.
+
 
 ## Setup NCBI API key
 
